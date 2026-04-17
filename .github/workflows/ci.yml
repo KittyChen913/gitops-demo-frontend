@@ -26,4 +26,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: superkittychen/${{ github.event.repository.name }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
