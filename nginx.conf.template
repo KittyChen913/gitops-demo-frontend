@@ -1,0 +1,36 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    # Use Docker's internal DNS; defer upstream resolution to request time
+    resolver 127.0.0.11 valid=10s ipv6=off;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Serve the static SPA
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Proxy API requests to the backend service.
+    # BACKEND_URL is injected at container start via envsubst.
+    # Example: BACKEND_URL=backend:8080
+    location /version {
+        set $upstream http://${BACKEND_URL};
+        proxy_pass         $upstream/version;
+        include            /etc/nginx/proxy_params;
+    }
+
+    location /health {
+        set $upstream http://${BACKEND_URL};
+        proxy_pass         $upstream/health;
+        include            /etc/nginx/proxy_params;
+    }
+
+    location /meta {
+        set $upstream http://${BACKEND_URL};
+        proxy_pass         $upstream/meta;
+        include            /etc/nginx/proxy_params;
+    }
+}
