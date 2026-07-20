@@ -18,7 +18,7 @@ function usePolling(fn, interval) {
 }
 
 function App() {
-  // ── /version ──────────────────────────────────────────
+  // ── /version 端點 ─────────────────────────────────────
   const [service,        setService]        = useState('—');
   const [version,        setVersion]        = useState('—');
   const [versionMsg,     setVersionMsg]     = useState('Connecting…');
@@ -28,15 +28,15 @@ function App() {
   const [flash,          setFlash]          = useState(false);
   const prevVersionRef = useRef(null);
 
-  // ── /health ───────────────────────────────────────────
+  // ── /health 端點 ──────────────────────────────────────
   const [healthStatus, setHealthStatus] = useState('idle'); // 'ok' | 'err' | 'idle'
   const [healthError,  setHealthError]  = useState('');
 
-  // ── /meta (optional) ──────────────────────────────────
-  // null = not yet fetched, false = not available, object = data
+  // ── /meta 端點（選用）─────────────────────────────────
+  // null 表示尚未取得，false 表示無法使用，物件表示已取得資料
   const [meta, setMeta] = useState(null);
 
-  // ── Fetch /version ────────────────────────────────────
+  // ── 取得 /version ─────────────────────────────────────
   const fetchVersion = useCallback(async () => {
     try {
       const res = await fetch('/version');
@@ -63,7 +63,7 @@ function App() {
     }
   }, []);
 
-  // ── Fetch /health ─────────────────────────────────────
+  // ── 取得 /health ──────────────────────────────────────
   const fetchHealth = useCallback(async () => {
     try {
       const res = await fetch('/health');
@@ -78,7 +78,7 @@ function App() {
     }
   }, []);
 
-  // ── Fetch /meta (once, optional) ──────────────────────
+  // ── 取得一次 /meta（選用）─────────────────────────────
   const fetchMeta = useCallback(async () => {
     try {
       const res = await fetch('/meta');
@@ -100,12 +100,12 @@ function App() {
     fetchMeta();
   }, [fetchVersion, fetchHealth, fetchMeta]);
 
-  // ── Derived labels ─────────────────────────────────────
+  // ── 衍生顯示標籤 ───────────────────────────────────────
   const healthLabel = STATUS_LABELS.health[healthStatus]   ?? 'Checking…';
 
   const connLabel   = STATUS_LABELS.version[versionStatus] ?? 'Connecting…';
 
-  // ── Render ─────────────────────────────────────────────
+  // ── 畫面渲染 ───────────────────────────────────────────
   return (
     <div className="container">
       <header className="header">

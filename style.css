@@ -35,7 +35,7 @@ body {
   text-align: center;
 }
 
-/* ── Header ── */
+/* ── 頁首 ── */
 .header { margin-bottom: 2.5rem; }
 .header h1 {
   font-size: 1.25rem;
@@ -62,7 +62,7 @@ body {
   color: var(--c-text-muted);
 }
 
-/* ── Version ── */
+/* ── 版本 ── */
 .version {
   font-size: 3.5rem;
   font-weight: 700;
@@ -78,14 +78,14 @@ body {
   100% { color: var(--c-primary); transform: scale(1); }
 }
 
-/* ── Message ── */
+/* ── 訊息 ── */
 .message {
   font-size: 1.05rem;
   color: var(--c-text-body);
   margin-top: 0.25rem;
 }
 
-/* ── Service name ── */
+/* ── 服務名稱 ── */
 .service-name {
   font-size: 1.4rem;
   font-weight: 600;
@@ -93,7 +93,7 @@ body {
   margin-top: 0.2rem;
 }
 
-/* ── Card row layout (service | version side-by-side) ── */
+/* ── 卡片橫列版面（服務與版本並排）── */
 .card-row {
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@ body {
   background: var(--c-border);
 }
 
-/* ── Health badge ── */
+/* ── 健康狀態徽章 ── */
 .health-badge {
   display: inline-flex;
   align-items: center;
@@ -119,7 +119,7 @@ body {
 .health-badge.ok  { color: var(--c-ok); }
 .health-badge.err { color: var(--c-err); }
 
-/* ── Meta rows ── */
+/* ── 中繼資料列 ── */
 .meta-row {
   display: flex;
   justify-content: space-between;
@@ -179,14 +179,14 @@ body {
   color: var(--c-text-dim);
 }
 
-/* ── Error ── */
+/* ── 錯誤 ── */
 .error-msg {
   margin-top: 0.6rem;
   font-size: 0.8rem;
   color: #f87171;
 }
 
-/* ── Button ── */
+/* ── 按鈕 ── */
 .btn-refresh {
   background: #2563eb;
   color: #fff;

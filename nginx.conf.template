@@ -2,20 +2,20 @@ server {
     listen 80;
     server_name localhost;
 
-    # Use Docker's internal DNS; defer upstream resolution to request time
+    # 使用 Docker 內部 DNS，將上游位址解析延後至請求時進行
     resolver 127.0.0.11 valid=10s ipv6=off;
 
     root /usr/share/nginx/html;
     index index.html;
 
-    # Serve the static SPA
+    # 提供靜態 SPA
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    # Proxy API requests to the backend service.
-    # BACKEND_URL is injected at container start via envsubst.
-    # Example: BACKEND_URL=backend:8080
+    # 將 API 請求代理至後端服務。
+    # BACKEND_URL 會在容器啟動時透過 envsubst 注入。
+    # 範例：BACKEND_URL=backend:8080
     location /version {
         set $upstream http://${BACKEND_URL};
         proxy_pass         $upstream/version;

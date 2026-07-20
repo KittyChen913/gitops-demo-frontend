@@ -1,24 +1,24 @@
-# ── Build stage (optional — only needed if you add a build step later) ──────
-# For a pure-HTML app we skip the build stage and go straight to nginx.
+# ── 建置階段（選用；日後加入建置步驟時才需要）──────────────────────────
+# 純 HTML 應用程式不需要建置階段，直接使用 Nginx。
 
-# ── Runtime stage ────────────────────────────────────────────────────────────
+# ── 執行階段 ────────────────────────────────────────────────────────────────
 FROM nginx:1.27-alpine
 
-# Remove the default nginx vhost
+# 移除 Nginx 預設虛擬主機設定
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy static assets
+# 複製靜態資源
 COPY index.html App.jsx style.css /usr/share/nginx/html/
 
-# The official nginx image automatically runs envsubst on every *.template
-# file placed under /etc/nginx/templates/ and writes the result to
-# /etc/nginx/conf.d/.  BACKEND_URL is substituted at container start.
+# Nginx 官方映像會自動對 /etc/nginx/templates/ 下的每個 *.template 檔案
+# 執行 envsubst，並將結果寫入 /etc/nginx/conf.d/。
+# BACKEND_URL 會在容器啟動時被替換。
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY nginx.proxy_params  /etc/nginx/proxy_params
 
-# Default backend service address (override with -e BACKEND_URL=...)
+# 後端服務預設位址（可用 -e BACKEND_URL=... 覆寫）
 ENV BACKEND_URL=backend:8080
 
 EXPOSE 80
 
-# Inherits the default nginx entrypoint (handles envsubst + nginx -g daemon off)
+# 沿用 Nginx 預設 entrypoint（處理 envsubst 與 nginx -g daemon off）
