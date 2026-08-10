@@ -1,6 +1,18 @@
 name: CI - Build & Push Docker Image
 
 on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'Dockerfile'
+      - 'index.html'
+      - 'App.jsx'
+      - 'style.css'
+      - 'nginx.conf.template'
+      - 'nginx.proxy_params'
+      - '.github/actions/**'
+      - '.github/workflows/**'
   push:
     branches:
       - master
@@ -11,7 +23,38 @@ on:
       - 'docs/**'
 
 jobs:
+  validate-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6.0.2
+
+      - name: Lint GitHub Actions
+        uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color
+
+      - name: Build image without push
+        uses: docker/build-push-action@v7.1.0
+        with:
+          context: .
+          load: true
+          push: false
+          tags: gitops-demo-frontend:pr-validation
+
+      - name: Validate rendered Nginx configuration
+        run: >-
+          docker run --rm --network none
+          -e BACKEND_URL=backend:8080
+          gitops-demo-frontend:pr-validation
+          nginx -t
+
   build-and-push:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: ${{ github.ref_type == 'tag' && 'prod' || 'dev' }}
     permissions:
@@ -23,7 +66,7 @@ jobs:
 
       - name: Set image tag
         id: image-tag
-        run: echo "tag=${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}" >> $GITHUB_OUTPUT
+        run: echo "tag=${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v4.1.0
