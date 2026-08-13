@@ -12,12 +12,9 @@ COPY index.html App.jsx style.css /usr/share/nginx/html/
 
 # Nginx 官方映像會自動對 /etc/nginx/templates/ 下的每個 *.template 檔案
 # 執行 envsubst，並將結果寫入 /etc/nginx/conf.d/。
-# BACKEND_URL 會在容器啟動時被替換。
+# BACKEND_URL 由 container runtime 提供，並在容器啟動時被替換。
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY nginx.proxy_params  /etc/nginx/proxy_params
-
-# 後端服務預設位址（可用 -e BACKEND_URL=... 覆寫）
-ENV BACKEND_URL=backend:8080
 
 EXPOSE 80
 

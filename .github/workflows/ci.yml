@@ -49,7 +49,7 @@ jobs:
       - name: Validate rendered Nginx configuration
         run: >-
           docker run --rm --network none
-          -e BACKEND_URL=backend:8080
+          -e BACKEND_URL=127.0.0.1:1
           gitops-demo-frontend:pr-validation
           nginx -t
 

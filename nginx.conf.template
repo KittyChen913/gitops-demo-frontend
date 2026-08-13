@@ -2,9 +2,6 @@ server {
     listen 80;
     server_name localhost;
 
-    # 使用 Docker 內部 DNS，將上游位址解析延後至請求時進行
-    resolver 127.0.0.11 valid=10s ipv6=off;
-
     root /usr/share/nginx/html;
     index index.html;
 
@@ -14,23 +11,19 @@ server {
     }
 
     # 將 API 請求代理至後端服務。
-    # BACKEND_URL 會在容器啟動時透過 envsubst 注入。
-    # 範例：BACKEND_URL=backend:8080
+    # BACKEND_URL 會在容器啟動時透過 envsubst 注入，實際 endpoint 由 deployment owner 提供。
     location /version {
-        set $upstream http://${BACKEND_URL};
-        proxy_pass         $upstream/version;
+        proxy_pass         http://${BACKEND_URL}/version;
         include            /etc/nginx/proxy_params;
     }
 
     location /health {
-        set $upstream http://${BACKEND_URL};
-        proxy_pass         $upstream/health;
+        proxy_pass         http://${BACKEND_URL}/health;
         include            /etc/nginx/proxy_params;
     }
 
     location /meta {
-        set $upstream http://${BACKEND_URL};
-        proxy_pass         $upstream/meta;
+        proxy_pass         http://${BACKEND_URL}/meta;
         include            /etc/nginx/proxy_params;
     }
 }
